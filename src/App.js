@@ -1,10 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
-import { LineChart, Line } from 'recharts';
+import Plot from 'react-plotly.js';
+import { useState } from 'react';
 
 
 function App() {
-  let data = fetch(
+  let data
+  const [dollarsData, setDollarsData] = useState([]);
+  const [timeData, setTimeData] = useState([]);
+  fetch(
     'http://localhost:8000/orders/',
     {
       method: 'GET',
@@ -16,28 +20,30 @@ function App() {
     .then(data => {
       let costs = data;
       console.log(costs)
-      costs.map(function (costs) {
-        
-      })
-
-    });
-
+      data.map(function (record, idx, arr) {
+        dollarsData.push(record['cost_dollars_float']);
+      });
+      data.map(function (record, idx, arr) {
+        timeData.push(record['delivery_time_text']);
+      });
+  });
+  console.log(dollarsData);
+  const trace = {
+    x: useState(),
+    y: dollarsData,
+    type: "scatter",
+    mode: 'lines+markers',
+    marker: {color: 'red'},
+  };
+  const plotData = [trace]; 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Plot
+        data={plotData}
+        layout={{
+          title: "Diameter and height in cylinders",
+        }}
+      />
     </div>
   );
 }
