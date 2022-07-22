@@ -1,7 +1,27 @@
 import logo from './logo.svg';
 import './App.css';
+import { LineChart, Line } from 'recharts';
+
 
 function App() {
+  let data = fetch(
+    'http://localhost:8000/orders/',
+    {
+      method: 'GET',
+      headers: {
+        "Origin": "http://localhost:3000"
+      }
+    })
+    .then(response => { return response.json() })
+    .then(data => {
+      let costs = data;
+      console.log(costs)
+      costs.map(function (costs) {
+        
+      })
+
+    });
+
   return (
     <div className="App">
       <header className="App-header">
